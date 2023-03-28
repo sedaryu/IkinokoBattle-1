@@ -6,19 +6,27 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float turnSpeed = 360;
-    [SerializeField] private float moveSpeed = 3;
-    [SerializeField] private float jumpPower = 3;
+    [SerializeField] private float moveSpeed = 6;
+    [SerializeField] private float stepSpeed = 5.5f;
+    [SerializeField] private float jumpPower = 3.5f;
+
+    [SerializeField] private Animator animator;
 
     private CharacterController characterController;
     private Transform _transform;
     private float turn;
     private Vector3 moveVelocity;
 
+    private float startMousePosition;
+
     // Start is called before the first frame update
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         _transform = this.transform;
+
+        //FindObjectOfType<EnemyMove>().attackPlayer.AddListener(OnAttacked);
+        FindAnyObjectByType<EnemyMove>().attackPlayer.AddListener(OnAttacked);
     }
 
     // Update is called once per frame
@@ -32,11 +40,27 @@ public class PlayerController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 moveVelocity.y = jumpPower;
+                startMousePosition = Input.mousePosition.x;
             }
         }
         else
         {
             moveVelocity.y += Physics.gravity.y * Time.deltaTime;
+
+            if (Input.GetMouseButton(0))
+            {
+                if (Input.mousePosition.x < startMousePosition)
+                {
+                    moveVelocity.x = -stepSpeed;
+                }
+                else if (startMousePosition < Input.mousePosition.x)
+                {
+                    moveVelocity.x = stepSpeed;
+                }
+
+                Vector3 step = new Vector3(moveVelocity.x * _transform.right.x, moveVelocity.y, moveVelocity.x * _transform.right.z);
+                characterController.Move(step * Time.deltaTime);
+            }
         }
 
         moveVelocity.z = Input.GetAxis("Vertical") * moveSpeed;
@@ -44,5 +68,12 @@ public class PlayerController : MonoBehaviour
         Vector3 move = new Vector3(moveVelocity.z * _transform.forward.x, moveVelocity.y, moveVelocity.z * _transform.forward.z);
 
         characterController.Move(move * Time.deltaTime);
+
+        animator.SetFloat("MoveSpeed", new Vector3(0, 0, moveVelocity.z).magnitude);
+    }
+
+    private void OnAttacked()
+    {
+        Debug.Log("GameOver");
     }
 }

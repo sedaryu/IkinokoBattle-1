@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float turnSpeed = 360;
+    [SerializeField] private float turnSpeed;
+    [SerializeField] private float groundTurnSpeed = 90;
+    [SerializeField] private float jumpTurnSpeed = 180;
     [SerializeField] private float moveSpeed = 6;
     [SerializeField] private float stepSpeed = 5.5f;
     [SerializeField] private float jumpPower = 3.5f;
@@ -25,18 +27,16 @@ public class PlayerController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         _transform = this.transform;
 
-        //FindObjectOfType<EnemyMove>().attackPlayer.AddListener(OnAttacked);
         FindAnyObjectByType<EnemyMove>().attackPlayer.AddListener(OnAttacked);
     }
 
     // Update is called once per frame
     void Update()
     {
-        turn = Input.GetAxis("Horizontal") * turnSpeed;
-        _transform.Rotate(0, turn * Time.deltaTime, 0);
 
         if (characterController.isGrounded)
         {
+            turnSpeed = groundTurnSpeed;
             if (Input.GetMouseButtonDown(0))
             {
                 moveVelocity.y = jumpPower;
@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            turnSpeed = jumpTurnSpeed;
             moveVelocity.y += Physics.gravity.y * Time.deltaTime;
 
             if (Input.GetMouseButton(0))
@@ -62,6 +63,9 @@ public class PlayerController : MonoBehaviour
                 characterController.Move(step * Time.deltaTime);
             }
         }
+
+        turn = Input.GetAxis("Horizontal") * turnSpeed;
+        _transform.Rotate(0, turn * Time.deltaTime, 0);
 
         moveVelocity.z = Input.GetAxis("Vertical") * moveSpeed;
 

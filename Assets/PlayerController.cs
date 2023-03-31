@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -5,7 +6,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float turnSpeed;
+    private float turnSpeed; //回転スピード
     [SerializeField] private float groundTurnSpeed = 90;
     [SerializeField] private float jumpTurnSpeed = 180;
     [SerializeField] private float moveSpeed = 6;
@@ -26,8 +27,6 @@ public class PlayerController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         _transform = this.transform;
-
-        FindAnyObjectByType<EnemyMove>().attackPlayer.AddListener(OnAttacked);
     }
 
     // Update is called once per frame
@@ -74,10 +73,5 @@ public class PlayerController : MonoBehaviour
         characterController.Move(move * Time.deltaTime);
 
         animator.SetFloat("MoveSpeed", new Vector3(0, 0, moveVelocity.z).magnitude);
-    }
-
-    private void OnAttacked()
-    {
-        Debug.Log("GameOver");
     }
 }

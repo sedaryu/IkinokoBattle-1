@@ -1,21 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using Debug = UnityEngine.Debug;
 
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(EnemyStatus))]
 public class EnemyMove : MonoBehaviour
 {
-    private NavMeshAgent agent; //追跡用AI
+    [SerializeField] private LayerMask raycastLayerMask;
 
-    //private RaycastHit[] raycastHits = new RaycastHit[10]; //
+    private NavMeshAgent _agent; //追跡用AI
+    private RaycastHit[] raycastHits = new RaycastHit[10]; //追跡用Ray
+    private EnemyStatus _status;
 
     public UnityEvent attackPlayer;
 
     // Start is called before the first frame update
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        _agent = GetComponent<NavMeshAgent>();
+        _status = GetComponent<EnemyStatus>();
     }
 
     // Update is called once per frame
@@ -24,51 +31,48 @@ public class EnemyMove : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            attackPlayer.Invoke();
-        }
-    }
-
     //CollisionDetecter内に侵入したプレイヤーを追跡する
     public void OnDetectObject(Collider collider)
     {
+        if (!_status.IsMovable) //MobStatusの_statusがNormal以外の場合
+        {
+            _agent.isStopped = true;
+            return;
+        }
+
         if (collider.CompareTag("Player"))
         {
             Vector3 positionDiff = collider.transform.position - this.transform.position;
             float distance = positionDiff.magnitude; //敵とプレーヤーの距離
             Vector3 direction = positionDiff.normalized; //敵からプレイヤーへの方向
 
-            if (Physics.Raycast(this.transform.position, direction, out RaycastHit hit, distance))
+            int hitcount = Physics.RaycastNonAlloc(this.transform.position, direction, raycastHits, distance, raycastLayerMask);
+
+            Debug.Log("hitcount:" + hitcount);
+
+            if (hitcount == 0)
             {
-                if (hit.collider.CompareTag("Player"))
-                {
-                    Debug.Log("PlayerHIT");
-                    agent.isStopped = false;
-                    agent.destination = collider.transform.position;
-                }
-                else
-                {
-                    Debug.Log("HIT");
-                    agent.isStopped = true;
-                }
+                _agent.isStopped = false;
+                _agent.destination = collider.transform.position;
+            }
+            else
+            {
+                _agent.isStopped = true;
             }
 
-
-            //int hitcount = physics.raycastnonalloc(this.transform.position, direction, raycasthits, distance);
-
-            //debug.log("hitcount:" + hitcount);
-
-            //if (hitcount == 0)
+            //if (Physics.Raycast(this.transform.position, direction, out RaycastHit hit, distance))
             //{
-            //    agent.isstopped = false;
-            //    agent.destination = collider.transform.position;
-            //}
-            //else
-            //{
-            //    agent.isstopped = true;
+            //    if (hit.collider.CompareTag("Player"))
+            //    {
+            //        Debug.Log("PlayerHIT");
+            //        agent.isStopped = false;
+            //        agent.destination = collider.transform.position;
+            //    }
+            //    else
+            //    {
+            //        Debug.Log("HIT");
+            //        agent.isStopped = true;
+            //    }
             //}
         }
 

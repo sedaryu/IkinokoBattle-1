@@ -28,8 +28,6 @@ public class RaycastDetecter : MonoBehaviour
         { 
             onRayHit.Invoke(hit.collider);
         }
-
-        Debug.DrawRay(ray.origin, ray.direction * 25.0f, Color.red, 5.0f);
     }
 
     [Serializable]

@@ -73,6 +73,8 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(0, turn * Time.deltaTime, 0);
         //プレイヤーの向いている方向にあわせて移動
         characterController.Move(new Vector3(moveVelocity.z * transform.forward.x, moveVelocity.y, moveVelocity.z * transform.forward.z) * Time.deltaTime);
+        //アニメーターに値を代入
+        animator.SetFloat("MoveSpeed", new Vector3(0, 0, moveVelocity.z).magnitude);
 
         ////移動処理
         //if (characterController.isGrounded) //地上にいる場合

@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(MobStatus))]
 public class MobAttack : MonoBehaviour
 {
-    [SerializeField] private float attackCooldown = 0.5f;
+    [SerializeField] private float attackCooldown = 0.5f; //攻撃後のクールダウン時間
     [SerializeField] private Collider attackCollider; //AttackHitDetectorオブジェクトにアタッチされたColider
 
     private MobStatus _status;
@@ -15,7 +15,7 @@ public class MobAttack : MonoBehaviour
         _status = GetComponent<MobStatus>();
     }
 
-    //攻撃関数(OnOnAttackRangeEnterから呼ばれる)
+    //攻撃メソッド
     public void AttackIfPossible()
     {
         if (!_status.IsAttackable) return;
@@ -33,15 +33,18 @@ public class MobAttack : MonoBehaviour
     public void OnAttackStart()
     { 
         attackCollider.enabled = true; //攻撃のコリダーを起動
+        Debug.Log("Attack!");
     }
 
     //attackColliderが攻撃対象に当たった際実行(AttackHitDetectorのCollisionDetectorスクリプトから呼ばれる)
     public void OnHitAttack(Collider collider)
     { 
         MobStatus targetMob = collider.GetComponent<MobStatus>();
-        if (targetMob != null) return;
+        Debug.Log("Hit");
+        if (targetMob == null) return;
 
         targetMob.Damage(1);
+        Debug.Log("Damage");
     }
 
     //攻撃終了時(Animatorから呼ばれる)

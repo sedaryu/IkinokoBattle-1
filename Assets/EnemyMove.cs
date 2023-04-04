@@ -16,8 +16,6 @@ public class EnemyMove : MonoBehaviour
     private RaycastHit[] raycastHits = new RaycastHit[10]; //�ǐ՗pRay
     private EnemyStatus _status;
 
-    public UnityEvent attackPlayer;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -48,9 +46,7 @@ public class EnemyMove : MonoBehaviour
 
             int hitcount = Physics.RaycastNonAlloc(this.transform.position, direction, raycastHits, distance, raycastLayerMask);
 
-            Debug.Log("hitcount:" + hitcount);
-
-            if (hitcount == 0)
+            if (hitcount == 1)
             {
                 _agent.isStopped = false;
                 _agent.destination = collider.transform.position;

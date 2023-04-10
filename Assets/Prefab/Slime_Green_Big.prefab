@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1189952489174975204}
   - component: {fileID: 4168814951598436742}
   - component: {fileID: 3177207458689328232}
+  - component: {fileID: 8756764818257459285}
   m_Layer: 9
   m_Name: Slime_Green_Big
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 154502270753163537}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 16.3, y: 0.000009536743, z: -15.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -151,6 +152,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackCooldown: 0.5
   attackCollider: {fileID: 5626358562778876215}
+--- !u!114 &8756764818257459285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154502270753163537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07e567edf3dbf94c9db4f7b82df5f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropRate: 1
+  itemPrefab: {fileID: -2452012394495500625, guid: 40b8297debc07c0438a89822811fec68, type: 3}
+  number: 1
 --- !u!1 &245616617714984586
 GameObject:
   m_ObjectHideFlags: 0

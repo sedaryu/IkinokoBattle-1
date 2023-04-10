@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 6186043770520080154}
   - component: {fileID: 5958300360898192473}
   - component: {fileID: 2862882105727011233}
+  - component: {fileID: -4212108169848510707}
   m_Layer: 9
   m_Name: Slime_Green
   m_TagString: Untagged
@@ -283,6 +284,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackCooldown: 0.5
   attackCollider: {fileID: 7673512476171524784}
+--- !u!114 &-4212108169848510707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829360227655211690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07e567edf3dbf94c9db4f7b82df5f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropRate: 0.5
+  itemPrefab: {fileID: 6736455638287780120, guid: cc29942d06949594b88a503c4e9667ce, type: 3}
+  number: 10
 --- !u!1 &1891676528070372210
 GameObject:
   m_ObjectHideFlags: 0

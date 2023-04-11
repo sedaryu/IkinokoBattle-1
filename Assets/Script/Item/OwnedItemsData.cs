@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class OwnedItemsData
 {
-    private const string PlayerPrefsKey = "OWNED_ITEMS_DATA"; //PlayerPrefs保存先キー
+    private const string PlayerPrefsKey = "OWNED_ITEMS_DATA"; //PlayerPrefs保存先キー(不変)
 
     public static OwnedItemsData Instance //インスタンスを返す
     {
@@ -38,7 +38,7 @@ public class OwnedItemsData
 
     [SerializeField] private List<OwnedItem> ownedItems = new List<OwnedItem>(); //どのアイテムを何個所持しているかを格納
 
-    private OwnedItemsData()
+    private OwnedItemsData() //OwnedItemDataクラスがインスタンスされるのを防ぐ
     {
     }
 

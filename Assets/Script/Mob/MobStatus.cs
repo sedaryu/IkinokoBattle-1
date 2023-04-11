@@ -28,6 +28,7 @@ public abstract class MobStatus : MonoBehaviour
         Attack, //攻撃時(時間経過でNormalに移行)
         Die, //死亡時(どの状態にも移行しない)
         Jump, //ジャンプ時
+        Shoot //射撃時
     }
 
     protected StateEnum _state = StateEnum.Normal; //初期値はNormal

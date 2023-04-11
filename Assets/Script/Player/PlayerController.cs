@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveVelocity;
     private PlayerStatus _status;
     private MobAttack _attack;
+    private PlayerShoot _shoot;
 
     private float startMousePosition;
 
@@ -35,14 +36,25 @@ public class PlayerController : MonoBehaviour
         _transform = this.transform;
         _status = this.GetComponent<PlayerStatus>();
         _attack = this.GetComponent<MobAttack>();
+        _shoot = this.GetComponent<PlayerShoot>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire2")) //攻撃
-        { 
-            _attack.AttackIfPossible();
+        if (_status.IsMovable)
+        {
+            if (Input.GetButton("Fire2"))
+            {
+                _shoot.ShootIfPossible(); //射撃状態へ移行
+            }
+        }
+        else if (_status.IsShootable)
+        {
+            if (Input.GetButtonUp("Fire2"))
+            {
+                _shoot.CancelShoot(); //通常状態へ戻る
+            }
         }
 
         if (_status.IsMovable) //地上移動可能な状態かどうか判別
@@ -59,12 +71,13 @@ public class PlayerController : MonoBehaviour
         }
         
 
-        if (_status.IsJumpable) //地上にいる場合
+        if (_status.IsMovable) //地上にいる場合
         {
-            if (Input.GetButton("Jump"))
+            if (Input.GetButtonDown("Jump"))
             {
                 _status.GoToJumpStateIfPossible(); //ジャンプ状態へ移行
                 moveVelocity.y = jumpPower;
+                startMousePosition = Input.mousePosition.x; //ジャンプ時のマウス位置を記録
             }
         }
         else //空中にいる場合
@@ -72,25 +85,53 @@ public class PlayerController : MonoBehaviour
             if (!characterController.isGrounded)
             {
                 moveVelocity.y += Physics.gravity.y * Time.deltaTime; //重力による落下の影響を受ける
-                if (Input.GetButton("Jump"))
-                {
-                    if (Input.mousePosition.x < Screen.width * 0.5f)
-                    { Debug.Log("Left"); }
-                    else if (Screen.width * 0.5f < Input.mousePosition.x)
-                    { Debug.Log("Right"); }
-                }
             }
             else
             {
                 _status.GoToNormalStateIfPossible(); //通常状態へ戻る
+                startMousePosition = Screen.width * 0.5f;
             }
         }
 
         //プレイヤーが方向転換を行う
-        turn = Input.GetAxis("Horizontal") * groundTurnSpeed;
-        transform.Rotate(0, turn * Time.deltaTime, 0);
-        //プレイヤーの向いている方向にあわせて移動
-        characterController.Move(new Vector3(moveVelocity.z * transform.forward.x, moveVelocity.y, moveVelocity.z * transform.forward.z) * Time.deltaTime);
+        if (_status.IsMovable) //地上にいる場合
+        {
+            turn = Input.GetAxis("Horizontal") * groundTurnSpeed;
+        }
+        else if (_status.IsStepable) //空中にいる場合
+        {
+            turn = Input.GetAxis("Horizontal") * jumpTurnSpeed;
+        }
+        transform.Rotate(0, turn * Time.deltaTime, 0); //回転を反映
+
+        //空中ステップ
+        if (_status.IsStepable)
+        {
+            if (Input.GetButton("Jump"))
+            {
+                if (Math.Abs(startMousePosition - Input.mousePosition.x) > Screen.width * 0.1f)
+                {
+                    if (Input.mousePosition.x < Screen.width * 0.5f)
+                    {
+                        moveVelocity.x = -stepSpeed;
+                    }
+                    else if (Screen.width * 0.5f < Input.mousePosition.x)
+                    {
+                        moveVelocity.x = stepSpeed;
+                    }
+                }
+            }
+        }
+        else
+        {
+            moveVelocity.x = 0;
+        }
+
+        //プレイヤーの向いている方向にあわせて前後移動
+        characterController.Move(new Vector3(moveVelocity.z * transform.forward.x, 0, moveVelocity.z * transform.forward.z) * Time.deltaTime);
+        //プレイヤーの向いている方向にあわせて左右・高低移動
+        characterController.Move(new Vector3(moveVelocity.x * _transform.right.x, moveVelocity.y, moveVelocity.x * _transform.right.z) * Time.deltaTime);
+
         //アニメーターに値を代入
         animator.SetFloat("MoveSpeed", new Vector3(0, 0, moveVelocity.z).magnitude);
 

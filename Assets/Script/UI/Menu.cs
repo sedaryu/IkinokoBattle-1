@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +18,6 @@ public class Menu : MonoBehaviour
         pauseButton.onClick.AddListener(Pause);
         itemsButton.onClick.AddListener(ToggleItemsDialog);
         recipeButton.onClick.AddListener(ToggleRecipeDialog);
-
-        Debug.Log(PlayerPrefs.GetString("OWNED_ITEMS_DATA"));
     }
 
     private void Pause()

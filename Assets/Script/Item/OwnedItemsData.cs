@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
 [Serializable]
 public class OwnedItemsData
 {
-    private const string PlayerPrefsKey = "OWNED_ITEMS_DATA"; //PlayerPrefs保存先キー(不変)
+    private const string JsonDataKey = "OWNED_ITEMS_DATA"; //Jsonファイル名(不変)
 
     public static OwnedItemsData Instance //インスタンスを返す
     {
@@ -15,9 +16,9 @@ public class OwnedItemsData
         {
             if (null == _instance) //_instanceがnullだった場合
             {
-                if (PlayerPrefs.HasKey(PlayerPrefsKey)) //指定したPlayerPrefのキーにデータがあった場合
+                if (LoadJsonOwnedItemData(out OwnedItemsData ownedItemsData)) //指定のJsonファイルにデータがあった場合
                 {
-                    _instance = JsonUtility.FromJson<OwnedItemsData>(PlayerPrefs.GetString(PlayerPrefsKey));
+                    _instance = ownedItemsData;
                 }
                 else //なかった場合
                 { 
@@ -29,24 +30,26 @@ public class OwnedItemsData
         }
     }
 
-    private static OwnedItemsData _instance;
+    private static OwnedItemsData _instance; //インスタンスが格納されている
 
     public OwnedItem[] OwnedItems //所持アイテム一覧を返す
     {
         get { return ownedItems.ToArray(); }
     }
 
-    [SerializeField] private List<OwnedItem> ownedItems = new List<OwnedItem>(); //どのアイテムを何個所持しているかを格納
+    [SerializeField] private List<OwnedItem> ownedItems = new List<OwnedItem>(); //どのアイテムを何個所持しているか(OwnedItemクラス)を格納
 
     private OwnedItemsData() //OwnedItemDataクラスがインスタンスされるのを防ぐ
     {
     }
 
-    public void Save() //string型のJsonデータにコンバートしてPlayerPrefsに保存
-    { 
-        string jsonString = JsonUtility.ToJson(this);
-        PlayerPrefs.SetString(PlayerPrefsKey, jsonString);
-        PlayerPrefs.Save();
+    public void Save() //指定のJsonファイルにデータを上書き保存
+    {
+        StreamWriter writer;
+        string jsonstr = JsonUtility.ToJson(this);
+        writer = new StreamWriter(Application.dataPath + $"/StreamingAssets/JsonData/{JsonDataKey}.json", false);
+        writer.WriteLine(jsonstr);
+        writer.Close();
     }
 
     public void Add(Item.ItemType type, int number = 1)
@@ -72,7 +75,7 @@ public class OwnedItemsData
 
     public OwnedItem GetItem(Item.ItemType type) //そのアイテムが入手済みの種類かどうか調べるメソッド
     {
-        return ownedItems.FirstOrDefault(x => x.Type == type);
+        return ownedItems.FirstOrDefault(x => x.Type == type); //未入手の場合nullを返す
     }
 
     [Serializable]
@@ -103,6 +106,26 @@ public class OwnedItemsData
         public void Use(int number = 1)
         {
             this.number -= number;
+        }
+    }
+
+    static private bool LoadJsonOwnedItemData(out OwnedItemsData ownedItemsData)
+    {
+        string datastr = "";
+        StreamReader reader;
+        reader = new StreamReader(Application.dataPath + $"/StreamingAssets/JsonData/{JsonDataKey}.json");
+        datastr = reader.ReadToEnd();
+        reader.Close();
+
+        if (datastr == "")
+        {
+            ownedItemsData = null;
+            return false;
+        }
+        else
+        {
+            ownedItemsData = JsonUtility.FromJson<OwnedItemsData>(datastr);
+            return true;
         }
     }
 }

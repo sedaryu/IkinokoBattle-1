@@ -40,32 +40,50 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (Input.GetButtonDown("Fire2")) //攻撃
         { 
             _attack.AttackIfPossible();
         }
 
-        if (_status.IsMovable) //移動可能な状態かどうか判別
+        if (_status.IsMovable) //地上移動可能な状態かどうか判別
         {
             moveVelocity.z = Input.GetAxis("Vertical") * moveSpeed; //キー入力を受け移動する
         }
-        else //移動が不可能な状態であった場合
+        else if (_status.IsStepable) //空中移動可能な状態かどうか判別
+        {
+            moveVelocity.z = Input.GetAxis("Vertical") * moveSpeed; //キー入力を受け移動する
+        }
+        else //移動そのものが不可能な状態であった場合
         {
             moveVelocity.z = 0;
         }
         
 
-        if (characterController.isGrounded) //地上にいる場合
+        if (_status.IsJumpable) //地上にいる場合
         {
             if (Input.GetButton("Jump"))
             {
+                _status.GoToJumpStateIfPossible(); //ジャンプ状態へ移行
                 moveVelocity.y = jumpPower;
             }
         }
         else //空中にいる場合
         {
-            moveVelocity.y += Physics.gravity.y * Time.deltaTime; //重力による落下の影響を受ける
+            if (!characterController.isGrounded)
+            {
+                moveVelocity.y += Physics.gravity.y * Time.deltaTime; //重力による落下の影響を受ける
+                if (Input.GetButton("Jump"))
+                {
+                    if (Input.mousePosition.x < Screen.width * 0.5f)
+                    { Debug.Log("Left"); }
+                    else if (Screen.width * 0.5f < Input.mousePosition.x)
+                    { Debug.Log("Right"); }
+                }
+            }
+            else
+            {
+                _status.GoToNormalStateIfPossible(); //通常状態へ戻る
+            }
         }
 
         //プレイヤーが方向転換を行う

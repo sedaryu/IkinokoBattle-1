@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //射撃
         if (_status.IsMovable)
         {
             if (Input.GetButton("Fire2"))
@@ -57,6 +58,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        //前後移動
         if (_status.IsMovable) //地上移動可能な状態かどうか判別
         {
             moveVelocity.z = Input.GetAxis("Vertical") * moveSpeed; //キー入力を受け移動する
@@ -70,7 +72,7 @@ public class PlayerController : MonoBehaviour
             moveVelocity.z = 0;
         }
         
-
+        //ジャンプ
         if (_status.IsMovable) //地上にいる場合
         {
             if (Input.GetButtonDown("Jump"))
@@ -80,7 +82,7 @@ public class PlayerController : MonoBehaviour
                 startMousePosition = Input.mousePosition.x; //ジャンプ時のマウス位置を記録
             }
         }
-        else //空中にいる場合
+        else if (_status.IsStepable) //空中にいる場合
         {
             if (!characterController.isGrounded)
             {
@@ -93,7 +95,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //プレイヤーが方向転換を行う
+        //方向転換
         if (_status.IsMovable) //地上にいる場合
         {
             turn = Input.GetAxis("Horizontal") * groundTurnSpeed;
@@ -101,6 +103,10 @@ public class PlayerController : MonoBehaviour
         else if (_status.IsStepable) //空中にいる場合
         {
             turn = Input.GetAxis("Horizontal") * jumpTurnSpeed;
+        }
+        else if (_status.IsShootable) //射撃状態の場合
+        {
+            turn = 0;
         }
         transform.Rotate(0, turn * Time.deltaTime, 0); //回転を反映
 

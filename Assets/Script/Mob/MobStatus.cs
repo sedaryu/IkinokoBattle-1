@@ -108,5 +108,7 @@ public abstract class MobStatus : MonoBehaviour
         }
 
         _state = StateEnum.Normal;
+
+        Debug.Log("Normal");
     }
 }

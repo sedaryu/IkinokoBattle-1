@@ -31,5 +31,7 @@ public class PlayerStatus : MobStatus
         }
 
         _state = StateEnum.Shoot; //ó‘Ô‚ğShoot‚ÖˆÚs
+
+        Debug.Log("Shoot");
     }
 }

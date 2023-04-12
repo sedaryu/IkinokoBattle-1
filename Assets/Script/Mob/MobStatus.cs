@@ -50,6 +50,8 @@ public abstract class MobStatus : MonoBehaviour
     protected virtual void Start()
     {
         _life = _lifeMax; //Hpを満タン状態に設定
+        LifeGaugeContainer.Instance.Add(this); //ライフゲージUIを生成し表示させる
+
         //_animator = this.GetComponent<Animator>();
     }
 
@@ -59,7 +61,7 @@ public abstract class MobStatus : MonoBehaviour
         
     }
 
-    public void Damage(int damage)
+    public void Damage(float damage)
     {
         if (_state == StateEnum.Die) //すでに死亡してる場合
         {
@@ -82,7 +84,7 @@ public abstract class MobStatus : MonoBehaviour
 
     protected virtual void OnDie() 
     { 
-        //処理
+        LifeGaugeContainer.Instance.Remove(this);
     }
 
     //攻撃状態に移行

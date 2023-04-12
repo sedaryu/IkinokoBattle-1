@@ -11,6 +11,7 @@ public class EnemyStatus : MobStatus
     protected override void Start()
     {
         base.Start(); //Šî’êƒNƒ‰ƒX‚ÌStartŠÖ”‚àÀs
+
         _agent = GetComponent<NavMeshAgent>();
     }
 

@@ -43,16 +43,15 @@ public abstract class MobStatus : MonoBehaviour
     float _lifeMax;
     public float LifeMax => _lifeMax; //最大HP
 
-    [SerializeField]
     protected Animator _animator;
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
         _life = _lifeMax; //Hpを満タン状態に設定
-        LifeGaugeContainer.Instance.Add(this); //ライフゲージUIを生成し表示させる
+        //LifeGaugeContainer.Instance.Add(this); //ライフゲージUIを生成し表示させる
 
-        //_animator = this.GetComponent<Animator>();
+        _animator = this.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -84,7 +83,7 @@ public abstract class MobStatus : MonoBehaviour
 
     protected virtual void OnDie() 
     { 
-        LifeGaugeContainer.Instance.Remove(this);
+        //LifeGaugeContainer.Instance.Remove(this);
     }
 
     //攻撃状態に移行

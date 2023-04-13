@@ -7,34 +7,28 @@ public class LifeGauge : MonoBehaviour
 {
     [SerializeField] private Image fillImage;
 
-    private RectTransform _parentRectTransform;
-    private Camera _camera;
     private MobStatus _status;
 
     // Update is called once per frame
     void Update()
     {
-        
+        Refresh();
     }
 
     //ゲージの初期化
-    public void Initialize(RectTransform parentRectTransform, Camera camera, MobStatus status)
+    public void Initialize(MobStatus status)
     {
-        _parentRectTransform = parentRectTransform;
-        _camera = camera;
         _status = status;
+        this.gameObject.transform.parent = _status.transform;
+        this.transform.localPosition = new Vector3(0, 5, 0);
+        this.transform.localScale = new Vector3(7.5f, 7.5f, 7.5f);
+        Refresh();
     }
 
     //ゲージ更新
     private void Refresh()
     {
         fillImage.fillAmount = _status.Life / _status.LifeMax; //残りライフ表示
-
-        //対象Mobの場所にゲージを移動する
-        Vector3 screenPoint = _camera.WorldToScreenPoint(_status.transform.position);
-        Vector2 localPoint;
-        //スクリーン座標をローカル座標へ変換するメソッド
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(_parentRectTransform, screenPoint, null, out localPoint);
-        transform.localPosition = localPoint + new Vector2(0, 80); //位置調整
+        this.transform.rotation = Camera.main.transform.rotation; //ゲージがカメラ方向に向くよう調整
     }
 }

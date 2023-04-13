@@ -23,7 +23,7 @@ public class MobItemDropper : MonoBehaviour
     {
         if (_status.Life <= 0) //ライフが尽きた場合
         {
-            DropIfNeeded(); //ドロップ判定処理が実行
+            //DropIfNeeded(); //ドロップ判定処理が実行
         }
     }
 

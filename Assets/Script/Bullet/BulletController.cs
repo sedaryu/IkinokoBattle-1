@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    [SerializeField] float speed = 100.0f;
-    [SerializeField] float damage = 1.0f;
+    private Bullet bullet; //弾丸の種類・ステータスが記録されている
 
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(DestroyBullet());
+        bullet = GetComponent<Bullet>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        this.transform.Translate(0, 0, speed * Time.deltaTime);
+        this.transform.Translate(0, 0, bullet.Speed * Time.deltaTime);
         Debug.Log("Flying");
     }
 
@@ -26,7 +26,7 @@ public class BulletController : MonoBehaviour
         Debug.Log("BulletHitting");
         if (targetMob == null) return;
 
-        targetMob.Damage(damage);
+        targetMob.Damage(bullet.Damage);
         Destroy(gameObject);
     }
 

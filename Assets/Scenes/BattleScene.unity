@@ -2242,6 +2242,67 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!1001 &1572208765
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1870081509}
+    m_Modifications:
+    - target: {fileID: 999361932852903337, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_Name
+      value: HandPistol
+      objectReference: {fileID: 0}
+    - target: {fileID: 999361932852903337, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.70710677
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.70710677
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165071579776724682, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 865f3dc3a65a7e444be0bc136a4fe328, type: 3}
 --- !u!114 &1617458929 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1301910214644112163, guid: 0a72d4d6cda887a40a93b10ae75ed326, type: 3}
@@ -2875,6 +2936,11 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!4 &1870081509 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4806507412398543207, guid: 0a72d4d6cda887a40a93b10ae75ed326, type: 3}
+  m_PrefabInstance: {fileID: 360486844}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1952813383
 GameObject:
   m_ObjectHideFlags: 0

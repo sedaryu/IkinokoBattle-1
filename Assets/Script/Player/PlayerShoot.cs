@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
@@ -9,13 +10,28 @@ public class PlayerShoot : MonoBehaviour
     private Transform mainCamera;
     private GameObject virtualCamera;
 
-    [SerializeField] private GameObject bulletPrefab; //バレッドプリハブ
+    private GameObject[] weapons; //武装プリハブ
+    private GameObject[] bullets; //弾丸プリハブ
+
+    private int selectedWeapon = 0; //使用中の武装のインデックス番号を指定
 
     void Start()
     {
         _status = GetComponent<PlayerStatus>();
         mainCamera = GameObject.Find("Main Camera").GetComponent<Transform>();
         virtualCamera = GameObject.Find("Virtual Camera");
+
+        Weapon.WeaponType[] equippedWeapons = EquippedWeaponsData.Instance.EquippedWeapons; //装備中の武器種を取得
+        weapons = new GameObject[equippedWeapons.Length];
+        bullets = new GameObject[equippedWeapons.Length];
+        for (int i = 0; i < equippedWeapons.Length; i++) //Resourcesからプリハブを取得
+        {
+            weapons[i] = Resources.Load($"Weapon/{equippedWeapons[i].ToString()}", typeof(GameObject)) as GameObject;
+            bullets[i] = weapons[i].GetComponent<Weapon>().Bullet; //武器に対応する弾丸プリハブを取得
+        }
+        //武装プリハブをインスタンス（所定の位置に）
+
+        weapons.ToList().ForEach(x => Debug.Log(x.GetComponent<Weapon>().Type.ToString()));
     }
 
     public void ShootIfPossible()
@@ -44,8 +60,17 @@ public class PlayerShoot : MonoBehaviour
         mainCamera.Rotate(0, aim.y * Time.deltaTime, 0);
     }
 
-    public void Shooting()
+    public void Shooting() //弾を発射する
     {
-        Instantiate(bulletPrefab, mainCamera.position, mainCamera.rotation);
+        Instantiate(bullets[selectedWeapon], mainCamera.position, mainCamera.rotation);
+    }
+
+    public void ChangeWeapon() //使用する武装を変更する
+    {
+        selectedWeapon++;
+        if (selectedWeapon >= weapons.Length)
+        {
+            selectedWeapon = 0;
+        }
     }
 }

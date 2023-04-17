@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using static OwnedItemsData;
 
 [Serializable]
 public class EquippedWeaponsData
@@ -30,6 +31,17 @@ public class EquippedWeaponsData
     }
 
     private static EquippedWeaponsData _instance; //インスタンスが格納されている
+
+    public Weapon.WeaponType[] EquippedWeapons //装備武器種一覧を返す
+    {
+        get { return equippedWeapons.ToArray(); }
+    }
+
+    [SerializeField] private List<Weapon.WeaponType> equippedWeapons = new List<Weapon.WeaponType>(); //装備中の武器種を格納
+
+    private EquippedWeaponsData()
+    { 
+    }
 
     static private bool LoadJsonEquippedWeaponsData(out EquippedWeaponsData equippedWeaponsData) //Jsonファイルから武装データを読み込む
     {

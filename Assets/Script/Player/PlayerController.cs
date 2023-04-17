@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
         else if (_status.IsShootable)
         {
             //”­ŽË‚·‚é
-            if (Input.GetButtonDown("LeftStep"))
+            if (Input.GetButton("LeftStep"))
             {
                 _shoot.Shooting();
             }

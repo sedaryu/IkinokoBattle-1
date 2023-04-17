@@ -145,9 +145,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 1
   _bulletPrefab: {fileID: 680894440243775967, guid: a521234f1527f9645a77dbe07d0e2f8a, type: 3}
-  _coolDown: 0
+  _coolDown: 0.1
   _stopping: 0
-  _reach: 2
+  _reach: 0.5
 --- !u!1 &4991744422888106383
 GameObject:
   m_ObjectHideFlags: 0

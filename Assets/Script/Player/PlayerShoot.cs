@@ -2,7 +2,6 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
@@ -11,11 +10,13 @@ public class PlayerShoot : MonoBehaviour
     private Transform mainCamera;
     private GameObject virtualCamera;
 
-    private List<GameObject> weapons = new List<GameObject>(); //•‘•ƒvƒŠƒnƒu
+    private List<GameObject> weapons = new List<GameObject>(); //æ­¦è£…ãƒ—ãƒªãƒãƒ–
     private List<Weapon> weaponScripts = new List<Weapon>();
-    private List<GameObject> bullets = new List<GameObject>(); //’eŠÛƒvƒŠƒnƒu
+    private List<GameObject> bullets = new List<GameObject>(); //å¼¾ä¸¸ãƒ—ãƒªãƒãƒ–
 
-    private int selectedWeapon = 0; //g—p’†‚Ì•‘•‚ÌƒCƒ“ƒfƒbƒNƒX”Ô†‚ğw’è
+    private int selectedWeapon = 0; //ä½¿ç”¨ä¸­ã®æ­¦è£…ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ç•ªå·ã‚’æŒ‡å®š
+
+    private GameObject rightHand; //ã‚­ãƒ£ãƒ©ã®å³æ‰‹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 
     private bool coolDown;
 
@@ -25,30 +26,35 @@ public class PlayerShoot : MonoBehaviour
         mainCamera = GameObject.Find("Main Camera").GetComponent<Transform>();
         virtualCamera = GameObject.Find("Virtual Camera");
 
-        Weapon.WeaponType[] equippedWeapons = EquippedWeaponsData.Instance.EquippedWeapons; //‘•”õ’†‚Ì•Šíí‚ğæ“¾
-        for (int i = 0; i < equippedWeapons.Length; i++) //Resources‚©‚çƒvƒŠƒnƒu‚ğæ“¾
+        Weapon.WeaponType[] equippedWeapons = EquippedWeaponsData.Instance.EquippedWeapons; //è£…å‚™ä¸­ã®æ­¦å™¨ç¨®ã‚’å–å¾—
+        for (int i = 0; i < equippedWeapons.Length; i++) //Resourcesã‹ã‚‰ãƒ—ãƒªãƒãƒ–ã‚’å–å¾—
         {
             weapons.Add(Resources.Load($"Weapon/{equippedWeapons[i].ToString()}", typeof(GameObject)) as GameObject);
             weaponScripts.Add(weapons[i].GetComponent<Weapon>());
-            bullets.Add(weaponScripts[i].Bullet); //•Ší‚É‘Î‰‚·‚é’eŠÛƒvƒŠƒnƒu‚ğæ“¾
+            bullets.Add(weaponScripts[i].Bullet); //æ­¦å™¨ã«å¯¾å¿œã™ã‚‹å¼¾ä¸¸ãƒ—ãƒªãƒãƒ–ã‚’å–å¾—
         }
-        //•‘•ƒvƒŠƒnƒu‚ğƒCƒ“ƒXƒ^ƒ“ƒXiŠ’è‚ÌˆÊ’u‚Éj
 
         weapons.ToList().ForEach(x => Debug.Log(x.GetComponent<Weapon>().Type.ToString()));
+
+        rightHand = this.transform.Find("SD_QUERY_01/SD_QUERY_01_Reference/hip/spine/upper/R_arm/R_arm2/R_hand").gameObject;
     }
 
     void Start()
     {
-
+        GameObject weapon = Instantiate(weapons[selectedWeapon]); //æ­¦è£…ã‚’å³æ‰‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«è¨­å®š
+        weapon.transform.parent = rightHand.transform;
+        //ä½ç½®ã‚’èª¿æ•´
+        weapon.transform.localPosition = new Vector3(0, 0.06f, 0.07f);
+        weapon.transform.rotation = Quaternion.Euler(-180, -90, -90);
     }
 
     public void ShootIfPossible()
     {
         if (!_status.IsMovable) return;
 
-        _status.GoToShootStateIfPossible(); //MobStatus‚Ì_state‚ğAttack‚É•ÏX
+        _status.GoToShootStateIfPossible(); //MobStatusã®_stateã‚’Attackã«å¤‰æ›´
 
-        //ƒJƒƒ‰‘€ì
+        //ã‚«ãƒ¡ãƒ©æ“ä½œ
         virtualCamera.SetActive(false);
         mainCamera.position = this.transform.position + new Vector3(0, 0.5f, 0);
         mainCamera.rotation = this.transform.rotation;
@@ -56,19 +62,19 @@ public class PlayerShoot : MonoBehaviour
 
     public void CancelShoot()
     {
-        _status.GoToNormalStateIfPossible(); //’Êíó‘Ô‚Ö–ß‚é
+        _status.GoToNormalStateIfPossible(); //é€šå¸¸çŠ¶æ…‹ã¸æˆ»ã‚‹
 
-        //ƒJƒƒ‰‘€ì
+        //ã‚«ãƒ¡ãƒ©æ“ä½œ
         virtualCamera.SetActive(true);
     }
 
     public void Aiming(Vector3 aim)
     {
-        //ƒJƒƒ‰‘€ì
+        //ã‚«ãƒ¡ãƒ©æ“ä½œ
         mainCamera.Rotate(0, aim.y * Time.deltaTime, 0);
     }
 
-    public void Shooting() //’e‚ğ”­Ë‚·‚é
+    public void Shooting() //å¼¾ã‚’ç™ºå°„ã™ã‚‹
     {
         if (coolDown) return;
         BulletController bullet = Instantiate(bullets[selectedWeapon], mainCamera.position, mainCamera.rotation).GetComponent<BulletController>();
@@ -83,7 +89,7 @@ public class PlayerShoot : MonoBehaviour
         coolDown = false;
     }
 
-    public void ChangeWeapon() //g—p‚·‚é•‘•‚ğ•ÏX‚·‚é
+    public void ChangeWeapon() //ä½¿ç”¨ã™ã‚‹æ­¦è£…ã‚’å¤‰æ›´ã™ã‚‹
     {
         selectedWeapon++;
         if (selectedWeapon >= weapons.Count)

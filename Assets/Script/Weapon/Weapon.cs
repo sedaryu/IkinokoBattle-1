@@ -10,7 +10,7 @@ public class Weapon : MonoBehaviour
     {
         HandPistol,
         PistolCarbine,
-        PulseGun,
+        PulseShooter,
         PulseRifle,
         BeamLauncher,
     }

@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 2165071579776724682}
   - component: {fileID: -2827814158825388569}
   m_Layer: 0
-  m_Name: PulseGun
+  m_Name: PulseShooter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

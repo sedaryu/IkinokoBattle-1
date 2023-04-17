@@ -58,6 +58,11 @@ public class PlayerController : MonoBehaviour
             {
                 _shoot.Shooting();
             }
+            //•‘•‚ğ•ÏX‚·‚é
+            if (Input.GetButtonDown("RightStep"))
+            {
+                _shoot.ChangeWeapon();
+            }
 
             if (Input.GetButtonUp("Fire2"))
             {

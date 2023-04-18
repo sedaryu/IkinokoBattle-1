@@ -6,10 +6,14 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
+    //プレイヤーステータス
     private PlayerStatus _status;
+
+    //カメラ取得
     private Transform mainCamera;
     private GameObject virtualCamera;
 
+    //武装オブジェクト・スクリプト取得
     private List<GameObject> weapons = new List<GameObject>(); //武装プリハブ
     private List<Weapon> weaponScripts = new List<Weapon>();
     private List<GameObject> bullets = new List<GameObject>(); //弾丸プリハブ

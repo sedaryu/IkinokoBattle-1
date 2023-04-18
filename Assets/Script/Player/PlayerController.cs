@@ -27,8 +27,7 @@ public class PlayerController : MonoBehaviour
     private MobAttack _attack;
     private PlayerShoot _shoot;
 
-    //private Vector2 shootStartMousePosition;
-    //private float jumpStartMousePosition;
+    private bool isGrounded;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +42,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        JudgeGrounded();
+
         //射撃
         if (_status.IsMovable)
         {
@@ -54,28 +55,24 @@ public class PlayerController : MonoBehaviour
         else if (_status.IsShootable)
         {
             //発射する
-            if (Input.GetButton("LeftStep"))
+            if (Input.GetButton("LeftArrow"))
             {
                 _shoot.Shooting();
             }
             //武装を変更する
-            if (Input.GetButtonDown("RightStep"))
+            if (Input.GetButtonDown("RightArrow"))
             {
                 _shoot.ChangeWeapon();
             }
-
+            //通常状態へ戻る
             if (Input.GetButtonUp("Fire2"))
             {
-                _shoot.CancelShoot(); //通常状態へ戻る
+                _shoot.CancelShoot(); 
             }
         }
 
         //前後移動
-        if (_status.IsMovable) //地上移動可能な状態かどうか判別
-        {
-            moveVelocity.z = Input.GetAxis("Vertical") * moveSpeed; //キー入力を受け移動する
-        }
-        else if (_status.IsStepable) //空中移動可能な状態かどうか判別
+        if (_status.IsMovable || _status.IsStepable) //移動可能な状態かどうか判別
         {
             moveVelocity.z = Input.GetAxis("Vertical") * moveSpeed; //キー入力を受け移動する
         }
@@ -87,24 +84,28 @@ public class PlayerController : MonoBehaviour
         //ジャンプ
         if (_status.IsMovable) //地上にいる場合
         {
-            if (Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("UpArrow"))
             {
                 _status.GoToJumpStateIfPossible(); //ジャンプ状態へ移行
                 moveVelocity.y = jumpPower;
-                //jumpStartMousePosition = Input.mousePosition.x; //ジャンプ時のマウス位置を記録
             }
         }
         else if (_status.IsStepable) //空中にいる場合
         {
-            if (characterController.isGrounded)
+            //近接攻撃
+            if (Input.GetButtonDown("DownArrow"))
+            {
+                Debug.Log("Attack");
+            }
+            //着地
+            if (isGrounded)
             {
                 _status.GoToNormalStateIfPossible(); //通常状態へ戻る
-                //jumpStartMousePosition = Screen.width * 0.5f;
             }
         }
 
         //重力
-        if (!characterController.isGrounded)
+        if (!isGrounded)
         {
             moveVelocity.y += Physics.gravity.y * Time.deltaTime; //重力による落下の影響を受ける
         }
@@ -129,13 +130,13 @@ public class PlayerController : MonoBehaviour
         //空中ステップ
         if (_status.IsStepable)
         {
-            if (Input.GetButton("Jump"))
+            if (Input.GetButton("UpArrow"))
             {
-                if (Input.GetButton("LeftStep"))
+                if (Input.GetButton("LeftArrow"))
                 {
                     moveVelocity.x = -stepSpeed;
                 }
-                else if (Input.GetButton("RightStep"))
+                else if (Input.GetButton("RightArrow"))
                 {
                     moveVelocity.x = stepSpeed;
                 }
@@ -164,5 +165,20 @@ public class PlayerController : MonoBehaviour
 
         //アニメーターに値を代入
         animator.SetFloat("MoveSpeed", new Vector3(0, 0, moveVelocity.z).magnitude);
+    }
+
+    private void JudgeGrounded() //接地判定処理を行う
+    {
+        Ray ray = new Ray(this.transform.position, Vector3.down);
+        Debug.DrawRay(this.transform.position, Vector3.down * 0.1f, Color.red);
+
+        if (Physics.Raycast(ray, 0.1f, 1 << 10))
+        {
+            isGrounded = true;
+        }
+        else
+        { 
+            isGrounded = false;
+        }
     }
 }

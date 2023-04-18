@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
@@ -27,20 +28,19 @@ public class BulletController : MonoBehaviour
     void Update()
     {
         this.transform.Translate(0, 0, bullet.Speed * Time.deltaTime);
-        Debug.Log("Flying");
     }
 
-    public void OnHitAttack(Collider collider)
+    public void OnHitAttack(Collider collider) //弾丸がヒットした場合
     {
         MobStatus targetMob = collider.GetComponent<MobStatus>();
-        Debug.Log("BulletHitting");
         if (targetMob == null) return;
 
-        targetMob.Damage(bullet.Damage);
+        targetMob.Damage(bullet.Damage); //ダメージを与える
+        targetMob.Knockback(this.transform.forward.normalized * stopping); //ノックバックのベクトルを渡す
         Destroy(gameObject);
     }
 
-    private IEnumerator DestroyBullet()
+    private IEnumerator DestroyBullet() //一定時間経過後弾丸が消滅する処理
     {
         yield return new WaitForSeconds(reach);
         Destroy(gameObject);

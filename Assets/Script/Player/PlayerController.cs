@@ -96,15 +96,17 @@ public class PlayerController : MonoBehaviour
         }
         else if (_status.IsStepable) //空中にいる場合
         {
-            if (!characterController.isGrounded)
-            {
-                moveVelocity.y += Physics.gravity.y * Time.deltaTime; //重力による落下の影響を受ける
-            }
-            else
+            if (characterController.isGrounded)
             {
                 _status.GoToNormalStateIfPossible(); //通常状態へ戻る
                 //jumpStartMousePosition = Screen.width * 0.5f;
             }
+        }
+
+        //重力
+        if (!characterController.isGrounded)
+        {
+            moveVelocity.y += Physics.gravity.y * Time.deltaTime; //重力による落下の影響を受ける
         }
 
         //方向転換
@@ -162,48 +164,5 @@ public class PlayerController : MonoBehaviour
 
         //アニメーターに値を代入
         animator.SetFloat("MoveSpeed", new Vector3(0, 0, moveVelocity.z).magnitude);
-
-        ////移動処理
-        //if (characterController.isGrounded) //地上にいる場合
-        //{
-        //    turnSpeed = groundTurnSpeed; //地上にいる場合、空中にいるよりターンするスピードが遅い
-        //    if (Input.GetMouseButtonDown(0)) //指定したボタンが入力されるとジャンプ
-        //    { 
-        //        moveVelocity.y = jumpPower;
-        //        startMousePosition = Input.mousePosition.x; //空中移動操作のため、ジャンプした瞬間のマウス位置を記録する
-        //    }
-        //}
-        //else
-        //{
-        //    turnSpeed = jumpTurnSpeed; //空中にいる場合、地上にいるよりターンするスピードが速い
-        //    moveVelocity.y += Physics.gravity.y * Time.deltaTime; //重力の影響を受ける
-
-        //    if (Input.GetMouseButton(0)) //指定したボタンを押し続けていた場合、空中移動が可能
-        //    {
-        //        if (Input.mousePosition.x < startMousePosition) //ジャンプした瞬間のマウス位置より左にマウスを動かせば、左へ移動
-        //        {
-        //            moveVelocity.x = -stepSpeed;
-        //        }
-        //        else if (startMousePosition < Input.mousePosition.x) //ジャンプした瞬間のマウス位置より右にマウスを動かせば、右へ移動
-        //        {
-        //            moveVelocity.x = stepSpeed;
-        //        }
-
-        //        //プレイヤーの方向に合わせ、移動ベクトルを調整
-        //        Vector3 step = new Vector3(moveVelocity.x * _transform.right.x, moveVelocity.y, moveVelocity.x * _transform.right.z);
-        //        characterController.Move(step * Time.deltaTime); //移動を実行
-        //    }
-        //}
-
-        //turn = Input.GetAxis("Horizontal") * turnSpeed;
-        //_transform.Rotate(0, turn * Time.deltaTime, 0);
-
-        //moveVelocity.z = Input.GetAxis("Vertical") * moveSpeed;
-
-        //Vector3 move = new Vector3(moveVelocity.z * _transform.forward.x, moveVelocity.y, moveVelocity.z * _transform.forward.z);
-
-        //characterController.Move(move * Time.deltaTime);
-
-        //animator.SetFloat("MoveSpeed", new Vector3(0, 0, moveVelocity.z).magnitude);
     }
 }

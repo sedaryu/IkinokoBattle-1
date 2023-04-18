@@ -69,8 +69,6 @@ public abstract class MobStatus : MonoBehaviour
 
         _life -= damage; //ダメージぶんライフが減る
 
-        Debug.Log(Life + $"{this.gameObject.name}");
-
         if (Life > 0) //被ダメージの結果生きていた場合
         {
             return;
@@ -79,6 +77,11 @@ public abstract class MobStatus : MonoBehaviour
         _state = StateEnum.Die; //死亡した場合
         _animator.SetTrigger("Die"); //死亡アニメーション
         OnDie(); //死亡時の処理
+    }
+
+    public void Knockback(Vector3 knockbackVector) //攻撃を受けた際のノックバック処理
+    {
+        this.transform.Translate(knockbackVector, Space.World);
     }
 
     protected virtual void OnDie() 

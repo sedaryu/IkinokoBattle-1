@@ -50,12 +50,10 @@ public class EnemyMove : MonoBehaviour
             {
                 _agent.isStopped = false;
                 _agent.destination = collider.transform.position;
-                Debug.DrawRay(transform.position, positionDiff, Color.green);
             }
             else
             {
                 _agent.isStopped = true;
-                Debug.DrawRay(transform.position, positionDiff, Color.red);
             }
 
             //if (Physics.Raycast(this.transform.position, direction, out RaycastHit hit, distance))

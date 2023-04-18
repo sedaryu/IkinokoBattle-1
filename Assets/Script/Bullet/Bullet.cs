@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+[CreateAssetMenu(fileName = "BulletStatus", menuName = "Custom/BulletStatus")]
+public class Bullet : ScriptableObject
 {
     public enum BulletType
     {

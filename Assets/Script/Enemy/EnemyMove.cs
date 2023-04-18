@@ -46,7 +46,7 @@ public class EnemyMove : MonoBehaviour
 
             int hitcount = Physics.RaycastNonAlloc(this.transform.position, direction, raycastHits, distance, raycastLayerMask);
 
-            if (hitcount == 1)
+            if (hitcount >= 1)
             {
                 _agent.isStopped = false;
                 _agent.destination = collider.transform.position;

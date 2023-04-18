@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    private Bullet bullet; //弾丸の種類・ステータスが記録されている
+    [SerializeField] private Bullet bullet; //弾丸の種類・ステータスが記録されている
 
     private float stopping; //弾がヒットした際のノックバックの大きさ
 
@@ -20,7 +20,6 @@ public class BulletController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bullet = this.GetComponent<Bullet>();
         StartCoroutine(DestroyBullet());
     }
 
